@@ -16,8 +16,6 @@ def recv_n_bytes(socket,n):
         if not packet:
             return None
         data.extend(packet)
-
-    print("read",len(data),"bytes")
     return data
 
 def recv_frame(socket):

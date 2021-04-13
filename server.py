@@ -19,14 +19,13 @@ def handle_client(*args,**kwargs):
         success,frame = frame_queue.get()
         bindump = pickle.dumps(frame)
         packaged_msg = struct.pack('>I',len(bindump)) + bindump
-        print("sent",len(bindump),"bytes")
         conn.sendall(packaged_msg)
 
     conn.close()
     
 
 def run_server(frame_queue):
-    host = "localhost"
+    host = "0.0.0.0"
     port = 42699
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     s.bind((host, port))
