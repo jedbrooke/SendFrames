@@ -45,6 +45,7 @@ def main():
     success = True
     while success:
         success,frame = webcam.read()
+        frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
         frame_queue.put((success,frame))
 
 
