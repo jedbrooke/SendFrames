@@ -8,6 +8,7 @@ import sys
 import pickle
 import struct
 
+DEFAULT_PORT = 42699
 
 def recv_n_bytes(socket,n):
     data = bytearray()
@@ -30,11 +31,13 @@ def main(host,port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, port))
     while True:
-
         frame = pickle.loads(recv_frame(s))
         cv2.imshow("frame",frame)
         cv2.waitKey(1000//30)
     s.close()
 
 if __name__ == '__main__':
-    main(sys.argv[1],int(sys.argv[2]))
+    port = DEFAULT_PORT
+    if len(sys.argv) > 2:
+        port = int(sys.argv[2])
+    main(sys.argv[1],port)

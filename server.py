@@ -9,6 +9,9 @@ import cv2
 import queue
 import pickle
 import struct
+import sys
+
+DEFAULT_PORT = 42699
 
 def handle_client(*args,**kwargs):
     conn,addr,frame_queue = args
@@ -24,9 +27,8 @@ def handle_client(*args,**kwargs):
     conn.close()
     
 
-def run_server(frame_queue):
+def run_server(frame_queue,port):
     host = "0.0.0.0"
-    port = 42699
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     s.bind((host, port))
     acepting_clients = True
@@ -37,9 +39,9 @@ def run_server(frame_queue):
         client_thread = threading.Thread(target=handle_client,args=(conn,addr,frame_queue))
         client_thread.start()
 
-def main():
+def main(port):
     frame_queue = queue.Queue()
-    server_thread = threading.Thread(target=run_server,args=(frame_queue,))
+    server_thread = threading.Thread(target=run_server,args=(frame_queue,port))
     server_thread.start()
     webcam = cv2.VideoCapture(0)
     success = True
@@ -50,5 +52,7 @@ def main():
 
 
 if __name__ == '__main__':
-    
-    main()
+    port = DEFAULT_PORT
+    if len(sys.argv) > 1:
+        port = int(sys.argv[1])
+    main(port)
